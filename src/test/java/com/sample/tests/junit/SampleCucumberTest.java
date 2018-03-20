@@ -10,7 +10,14 @@ import org.junit.runner.RunWith;
  * Date: 01/17/18
  * Time: 10:39 AM
  */
-@RunWith(Cucumber.class)
+@RunWith(ExtendedParallelScenarioCucumber.class)
+@ExtendedCucumberOptions(
+        threadsCount = 3,
+        outputFolder = "build/",
+        detailedReport = true,
+        detailedAggregatedReport = true,
+        jsonReport = "build/cucumber.json"
+)
 @CucumberOptions(
         features = {"./src/test/java/com/sample/tests/features"},
         glue = {"com/sample/tests/steps"},

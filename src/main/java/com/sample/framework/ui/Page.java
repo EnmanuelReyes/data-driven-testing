@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,7 +25,8 @@ import java.util.Set;
 public class Page {
 
     private static final long TIMEOUT = Configuration.timeout();
-    private static Page currentPage = null;
+
+    private static ConcurrentHashMap<String, Page> currentPages = new ConcurrentHashMap<String, Page>();
 
     private WebDriver driver;
 
@@ -49,11 +51,11 @@ public class Page {
     }
 
     public static Page getCurrentPage() {
-        return currentPage;
+        return currentPages.get(Driver.getThreadName());
     }
 
     public static void setCurrentPage(Page newPage) {
-        Page.currentPage = newPage;
+        currentPages.put(Driver.getThreadName(), newPage);
     }
 
     public WebDriver getDriver() {
@@ -96,6 +98,7 @@ public class Page {
         }
         return true;
     }
+
     public boolean isCurrent() throws IllegalAccessException {
         return isCurrent(TIMEOUT);
     }
@@ -104,9 +107,11 @@ public class Page {
         for (Field field : this.getClass().getFields()) {
             if (Control.class.isAssignableFrom(field.getType())) {
                 Alias alias = field.getAnnotation(Alias.class);
-                if (alias != null && name.equals(alias.value())) {{
-                    return (Control) field.get(this);
-                }}
+                if (alias != null && name.equals(alias.value())) {
+                    {
+                        return (Control) field.get(this);
+                    }
+                }
             }
         }
         return null;

@@ -32,19 +32,18 @@ import java.util.List;
  */
 public class SampleSearchTestNGTest {
 
-    private WebDriver driver;
+//    private WebDriver driver;
 
     @BeforeMethod(alwaysRun = true)
     public void setUp() throws Exception {
         DesiredCapabilities cap = new DesiredCapabilities();
         Driver.add(Configuration.get("browser"), cap);
-        driver = Driver.current();
-        driver.get(Configuration.get("url"));
+        Driver.current().get(Configuration.get("url"));
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
-        driver.quit();
+        Driver.current().quit();
     }
 
     @DataProvider(name = "inclass_provider")
@@ -113,7 +112,7 @@ public class SampleSearchTestNGTest {
     }
 
     private void sampleSearch(String destination) throws Exception {
-        SearchPage searchPage = PageFactory.init(driver, SearchPage.class);
+        SearchPage searchPage = PageFactory.init(Driver.current(), SearchPage.class);
 
         searchPage.editDestination.setText(destination);
         searchPage.buttonDownShevron.click();
